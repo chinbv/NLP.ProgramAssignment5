@@ -151,6 +151,59 @@ def main():##main method
 
         def properN_what_Rule():
             #What is a telescope?
+            #What was the Chinese Civil War?
+            #What is Twitter?
+            #What is love?
+            #What is a life sentence?
+
+            tokenIndex=1
+
+            if posTokens[tokenIndex][1] == "VBZ" or posTokens[tokenIndex][1] == "VBD" or posTokens[tokenIndex][1] == "VBP":
+                queryPhraseTokens.append(posTokens[tokenIndex][0])
+                tokenIndex += 1
+
+            if posTokens[tokenIndex][1] == "DT":
+                tokenIndex += 1
+
+            while(tokenIndex < len(posTokens)):
+                if posTokens[tokenIndex][1] == "NNP":
+                    questionPhraseTokens.append(posTokens[tokenIndex][0])
+                    print("questionPhraseTokens: " + str(questionPhraseTokens))
+                if posTokens[tokenIndex][1] == "NN":
+                    questionPhraseTokens.append(posTokens[tokenIndex][0])
+                    print("questionPhraseTokens: " + str(questionPhraseTokens))
+                if posTokens[tokenIndex][1] == "NNS":
+                    questionPhraseTokens.append(posTokens[tokenIndex][0])
+                    print("questionPhraseTokens: " + str(questionPhraseTokens))
+                if posTokens[tokenIndex][1] == "JJR":
+                    questionPhraseTokens.append(posTokens[tokenIndex][0])
+                    print("questionPhraseTokens: " + str(questionPhraseTokens))
+                if posTokens[tokenIndex][1] == "JJ":
+                    questionPhraseTokens.append(posTokens[tokenIndex][0])
+                    print("questionPhraseTokens: " + str(questionPhraseTokens))
+                # if posTokens[tokenIndex][1] == "NN" or posTokens[tokenIndex][1] == "VBD":
+                if posTokens[tokenIndex][1] == "VBD":
+                    queryPhraseTokens.append(posTokens[tokenIndex][0])
+                    print("queryPhraseTokens: " + str(queryPhraseTokens))
+                print("len(posTokens): " + str(len(posTokens)))
+                print("tokenIndex: " + str(tokenIndex))
+                tokenIndex += 1
+
+            whatAnswerTypes = ["NNP"]
+            whatPattern = ["NN"]
+
+            answerTypes.extend(whatAnswerTypes)
+            answerPattern.extend(whatPattern)
+
+            print("answerTypes: " + str(answerTypes))
+            print("answerPattern: " + str(answerPattern))
+
+        def where_Rule():
+            #Where is Central Park?
+            #Where is Bollywood?
+            #Where is Houston located?
+            #Where is Italy?
+            #Where is the White House?
 
             tokenIndex=1
 
@@ -161,25 +214,76 @@ def main():##main method
             if posTokens[tokenIndex][1] == "DT":
                 tokenIndex += 1
 
-            if posTokens[tokenIndex][1] == "NNP" or posTokens[tokenIndex][1] == "NN":
-                while(tokenIndex < len(posTokens)):
-                    print("Reached this spot")
-                    if posTokens[tokenIndex][1] == "NNP" or posTokens[tokenIndex][1] == "NN":
-                        questionPhraseTokens.append(posTokens[tokenIndex][0])
-                        print("questionPhraseTokens: " + str(questionPhraseTokens))
-                    # if posTokens[tokenIndex][1] == "NN" or posTokens[tokenIndex][1] == "VBD":
-                    if posTokens[tokenIndex][1] == "VBD":
-                        queryPhraseTokens.append(posTokens[tokenIndex][0])
-                        print("queryPhraseTokens: " + str(queryPhraseTokens))
-                    print("len(posTokens): " + str(len(posTokens)))
-                    print("tokenIndex: " + str(tokenIndex))
-                    tokenIndex += 1
+            while(tokenIndex < len(posTokens)):
+                if posTokens[tokenIndex][1] == "NNP":
+                    questionPhraseTokens.append(posTokens[tokenIndex][0])
+                    print("questionPhraseTokens: " + str(questionPhraseTokens))
+                if posTokens[tokenIndex][1] == "NN":
+                    questionPhraseTokens.append(posTokens[tokenIndex][0])
+                    print("questionPhraseTokens: " + str(questionPhraseTokens))
+                if posTokens[tokenIndex][1] == "NNS":
+                    questionPhraseTokens.append(posTokens[tokenIndex][0])
+                    print("questionPhraseTokens: " + str(questionPhraseTokens))
+                if posTokens[tokenIndex][1] == "JJR":
+                    questionPhraseTokens.append(posTokens[tokenIndex][0])
+                    print("questionPhraseTokens: " + str(questionPhraseTokens))
+                if posTokens[tokenIndex][1] == "JJ":
+                    questionPhraseTokens.append(posTokens[tokenIndex][0])
+                    print("questionPhraseTokens: " + str(questionPhraseTokens))
+                # if posTokens[tokenIndex][1] == "NN" or posTokens[tokenIndex][1] == "VBD":
+                if posTokens[tokenIndex][1] == "VBD":
+                    queryPhraseTokens.append(posTokens[tokenIndex][0])
+                    print("queryPhraseTokens: " + str(queryPhraseTokens))
+                if posTokens[tokenIndex][1] == "VBZ":
+                    queryPhraseTokens.append(posTokens[tokenIndex][0])
+                    print("queryPhraseTokens: " + str(queryPhraseTokens))
+                print("len(posTokens): " + str(len(posTokens)))
+                print("tokenIndex: " + str(tokenIndex))
+                tokenIndex += 1
 
-            whatAnswerTypes = ["NNP"]
-            whatPattern = ["NNP"]
+            whereAnswerTypes = ["NNP"]
+            wherePattern = ["NNP"]
 
-            answerTypes.extend(whatAnswerTypes)
-            answerPattern.extend(whatPattern)
+            answerTypes.extend(whereAnswerTypes)
+            answerPattern.extend(wherePattern)
+
+            print("answerTypes: " + str(answerTypes))
+            print("answerPattern: " + str(answerPattern))
+
+        def who_Rule():
+            #Who is Donald Trump?
+            #Who is Braden Holtby?
+            #Who is Steve Jobs?
+            #Who is Narendra Modi?
+            #Who is Tom Clancy?
+
+            tokenIndex=1
+
+            if posTokens[tokenIndex][1] == "VBZ" or posTokens[tokenIndex][1] == "VBD":
+                queryPhraseTokens.append(posTokens[tokenIndex][0])
+                tokenIndex += 1
+
+            if posTokens[tokenIndex][1] == "DT":
+                tokenIndex += 1
+
+            while(tokenIndex < len(posTokens)):
+                print("Reached this spot")
+                if posTokens[tokenIndex][1] == "NNP" or posTokens[tokenIndex][1] == "NN":
+                    questionPhraseTokens.append(posTokens[tokenIndex][0])
+                    print("questionPhraseTokens: " + str(questionPhraseTokens))
+                # if posTokens[tokenIndex][1] == "NN" or posTokens[tokenIndex][1] == "VBD":
+                if posTokens[tokenIndex][1] == "VBD":
+                    queryPhraseTokens.append(posTokens[tokenIndex][0])
+                    print("queryPhraseTokens: " + str(queryPhraseTokens))
+                print("len(posTokens): " + str(len(posTokens)))
+                print("tokenIndex: " + str(tokenIndex))
+                tokenIndex += 1
+
+            whoAnswerTypes = ["NNP","VBZ","NN"]
+            whoPattern = ["NNP","VBZ","NN"]
+
+            answerTypes.extend(whoAnswerTypes)
+            answerPattern.extend(whoPattern)
 
             print("answerTypes: " + str(answerTypes))
             print("answerPattern: " + str(answerPattern))
@@ -191,6 +295,8 @@ def main():##main method
         switcher = {
             "What" : properN_what_Rule,
             "When" : date_when_Rule,
+            "Where" : where_Rule,
+            "Who" : who_Rule,
         }
 
         def switch(firstToken):
@@ -332,7 +438,17 @@ def wiki_Search(questionPhraseTokens, queryPhraseTokens, answerTypes, answerPatt
     print("question tokens: ")
     print(queryPhraseTokens)
 
+    if questionPhrase == None or questionPhrase == "":
+        default_Recognizer()
+        return
+
     p_html=wiki_html.page(questionPhrase)
+
+    if p_html == None or p_html.text == None:
+        default_Recognizer()
+        return
+
+
     #print(p_html.text)
 
     #print("Categories")
