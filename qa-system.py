@@ -157,19 +157,9 @@ def main():##main method
             if posTokens[tokenIndex][1] == "VBZ" or posTokens[tokenIndex][1] == "VBD":
                 queryPhraseTokens.append(posTokens[tokenIndex][0])
                 tokenIndex += 1
-            else:
 
-                default_Recognizer()
-
-                return
-
-            if posTokens[tokenIndex][1] == "DT" or posTokens[tokenIndex][1] == "IN":
+            if posTokens[tokenIndex][1] == "DT":
                 tokenIndex += 1
-            else:
-
-                default_Recognizer()
-
-                return
 
             if posTokens[tokenIndex][1] == "NNP" or posTokens[tokenIndex][1] == "NN":
                 while(tokenIndex < len(posTokens)):
