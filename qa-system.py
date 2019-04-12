@@ -91,6 +91,9 @@ def main():##main method
 
         questionPhraseTokens = []
         queryPhraseTokens = []
+        answerTypes = []
+        answerPattern = []
+        tokenIndex = 0
 
 
         if (questionInput == "exit"):
@@ -99,35 +102,138 @@ def main():##main method
 
         posTokens = nltk.pos_tag(sentenceTokens)
 
-        answerType = None
-        tokenIndex = 0
+        print("posTokens: " + str(posTokens))
 
-        if posTokens[tokenIndex][0] == "What":
-            answerType = "definition"
+        # whatToken = ""
+        # whenToken = ""
+        firstToken = posTokens[tokenIndex][0]
 
-        if posTokens[tokenIndex][0] == "Who":
-            answerType = "person"
+        # if firstToken == "What":
+        #     whatToken = firstToken
+        #
+        # if questionType == "When":
+        #     whenToken = firstToken
 
-        if posTokens[tokenIndex][0] == "When":
-            answerType = "date"
+        def date_when_Rule():
+            #When was George Washington born?
 
-        if posTokens[tokenIndex][0] == "Where":
-            answerType == "location"
+            tokenIndex=1
 
-        tokenIndex += 1
-        if posTokens[tokenIndex][1] == "VBZ":
-            queryPhraseTokens.append(posTokens[tokenIndex][0])
-        tokenIndex += 1
-
-        if posTokens[tokenIndex][1] == "NNP":
-            stillNounPhrase = True
-            while(stillNounPhrase == True):
-                if tokenIndex >= len(posTokens):
-                    stillNounPhrase = False
-                else:
-                    questionPhraseTokens.append(posTokens[tokenIndex][0])
-
+            if posTokens[tokenIndex][1] == "VBZ" or posTokens[tokenIndex][1] == "VBD":
                 tokenIndex += 1
+            else:
+
+                default_Recognizer()
+
+                return
+
+            if posTokens[tokenIndex][1] == "NNP":
+                while(tokenIndex < len(posTokens)):
+                    if posTokens[tokenIndex][1] == "NNP":
+                        questionPhraseTokens.append(posTokens[tokenIndex][0])
+                        print("questionPhraseTokens: " + str(questionPhraseTokens))
+                    if posTokens[tokenIndex][1] == "NN" or posTokens[tokenIndex][1] == "VBD":
+                        queryPhraseTokens.append(posTokens[tokenIndex][0])
+                        print("queryPhraseTokens: " + str(queryPhraseTokens))
+                    print("len(posTokens): " + str(len(posTokens)))
+                    print("tokenIndex: " + str(tokenIndex))
+                    tokenIndex += 1
+
+            whenAnswerTypes = ["NNP", "CD"]
+            whenPattern = ["NNP", "CD", "CD"]
+
+            answerTypes.extend(whenAnswerTypes)
+            answerPattern.extend(whenPattern)
+
+            print("answerTypes: " + str(answerTypes))
+            print("answerPattern: " + str(answerPattern))
+
+
+        def properN_what_Rule():
+            #What is a telescope?
+
+            tokenIndex=1
+
+            if posTokens[tokenIndex][1] == "VBZ" or posTokens[tokenIndex][1] == "VBD":
+                queryPhraseTokens.append(posTokens[tokenIndex][0])
+                tokenIndex += 1
+            else:
+
+                default_Recognizer()
+
+                return
+
+            if posTokens[tokenIndex][1] == "DT" or posTokens[tokenIndex][1] == "IN":
+                tokenIndex += 1
+            else:
+
+                default_Recognizer()
+
+                return
+
+            if posTokens[tokenIndex][1] == "NNP" or posTokens[tokenIndex][1] == "NN":
+                while(tokenIndex < len(posTokens)):
+                    print("Reached this spot")
+                    if posTokens[tokenIndex][1] == "NNP" or posTokens[tokenIndex][1] == "NN":
+                        questionPhraseTokens.append(posTokens[tokenIndex][0])
+                        print("questionPhraseTokens: " + str(questionPhraseTokens))
+                    # if posTokens[tokenIndex][1] == "NN" or posTokens[tokenIndex][1] == "VBD":
+                    if posTokens[tokenIndex][1] == "VBD":
+                        queryPhraseTokens.append(posTokens[tokenIndex][0])
+                        print("queryPhraseTokens: " + str(queryPhraseTokens))
+                    print("len(posTokens): " + str(len(posTokens)))
+                    print("tokenIndex: " + str(tokenIndex))
+                    tokenIndex += 1
+
+            whatAnswerTypes = ["NNP"]
+            whatPattern = ["NNP"]
+
+            answerTypes.extend(whatAnswerTypes)
+            answerPattern.extend(whatPattern)
+
+            print("answerTypes: " + str(answerTypes))
+            print("answerPattern: " + str(answerPattern))
+
+        def default():
+
+            default_Recognizer()
+
+        switcher = {
+            "What" : properN_what_Rule,
+            "When" : date_when_Rule,
+        }
+
+        def switch(firstToken):
+            #print "I got here [1] " + currToken
+            return switcher.get(firstToken, default)()
+
+        switch(firstToken)
+
+        wiki_Search(questionPhraseTokens, queryPhraseTokens, answerTypes, answerPattern)
+
+
+        # if posTokens[tokenIndex][0] == "What":
+        #     answerType = "definition"
+        #
+        # if posTokens[tokenIndex][0] == "Who":
+        #     answerType = "person"
+        #
+        # if posTokens[tokenIndex][0] == "When":
+        #     answerType = "date"
+        #
+        # if posTokens[tokenIndex][0] == "Where":
+        #     answerType == "location"
+
+
+        # if posTokens[tokenIndex][1] == "NNP":
+        #     stillNounPhrase = True
+        #     while(stillNounPhrase == True):
+        #         if tokenIndex >= len(posTokens):
+        #             stillNounPhrase = False
+        #         else:
+        #             questionPhraseTokens.append(posTokens[tokenIndex][0])
+        #
+        #         tokenIndex += 1
 
         # if posTokens[tokenIndex][1] == "NN":
         #     stillNounPhrase = True
@@ -139,8 +245,10 @@ def main():##main method
         #         tokenIndex += 1
 
 
-        wiki_Search(questionPhraseTokens, queryPhraseTokens, None, None)
         # print("pos is: " + str(posTokens))
+
+def default_Recognizer():
+    print("I am not sure, please ask in a different way")
 
 def generate_Tokens(s):
 
@@ -228,14 +336,14 @@ def wiki_Search(questionPhraseTokens, queryPhraseTokens, answerTypes, answerPatt
     queryPhrase = " ".join(queryPhraseTokens)
 
 
-    # print("Asking about " + questionPhrase + " " + queryPhrase)
-    # print("subject tokens: ")
-    # print(questionPhraseTokens)
-    # print("question tokens: ")
-    # print(queryPhraseTokens)
+    print("Asking about " + questionPhrase + " " + queryPhrase)
+    print("subject tokens: ")
+    print(questionPhraseTokens)
+    print("question tokens: ")
+    print(queryPhraseTokens)
 
     p_html=wiki_html.page(questionPhrase)
-    # print(p_html.text)
+    #print(p_html.text)
 
     #print("Categories")
     #print_categories(p_html)
@@ -313,7 +421,7 @@ def wiki_Search(questionPhraseTokens, queryPhraseTokens, answerTypes, answerPatt
 
         # look the right type of answers
         for posTaggedWord, pos in posTaggedWords:
-            if answerTypes != None and pos in answerTypes:
+            if pos in answerTypes:
                 interestLevel += 1
                 break # to stop further matching on same answerType
 
@@ -357,13 +465,10 @@ def wiki_Search(questionPhraseTokens, queryPhraseTokens, answerTypes, answerPatt
 
     if mostInterestingSentence == None:
         print("I am not sure, please ask in a different way")
-    # else:
-    #     print(mostInterestingSentence)
+    else:
+        print(mostInterestingSentence)
         # print("interest level: " + str(highestInterestLevel))
         # print(mostInterestingTaggedWords)
-
-    if answerTypes == None or answerPattern == None:
-        print(mostInterestingSentence)
 
     answerNoQuestionPhraseWords = [word for word in mostInterestingTaggedWords if not word[0] in questionPhraseTokens]
     answerPhraseWords = [word for word in answerNoQuestionPhraseWords if not stemmer.stem(word[0]) in queryPhraseTokens]
@@ -371,10 +476,10 @@ def wiki_Search(questionPhraseTokens, queryPhraseTokens, answerTypes, answerPatt
     answerTokens = []
 
     for answerCandidate in answerPhraseWords:
-        if answerTypes != None and answerCandidate[1] in answerTypes:
+        if answerCandidate[1] in answerTypes:
             answerTokens.append(answerCandidate)
-    # print( "answer tokens: ")
-    # print( answerTokens)
+    print( "answer tokens: ")
+    print( answerTokens)
 
 
     # answer pattern match
@@ -388,7 +493,7 @@ def wiki_Search(questionPhraseTokens, queryPhraseTokens, answerTypes, answerPatt
         answerWords = answerTokens
     else:
         for aToken in answerTokens:
-            #print("answerpattern index " + str(answerPatternIndex))
+            print("answerpattern index " + str(answerPatternIndex))
             if aToken[1] == answerPattern[answerPatternIndex]:
                 #print("matched token with pattern " + aToken[0])
                 stillMatch = True
