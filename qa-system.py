@@ -83,11 +83,11 @@ def main():##main method
     while (1):
 
         questionInput = input("");
-        print ("Your input is: ", questionInput)
+        # print ("Your input is: ", questionInput)
 
         questionInput = ''.join([letter for letter in questionInput if letter not in punctuation])
 
-        print ("Your input after punc removal is: ", questionInput)
+        # print ("Your input after punc removal is: ", questionInput)
 
         questionPhraseTokens = []
         queryPhraseTokens = []
@@ -152,7 +152,7 @@ def generate_Tokens(s):
     # Break sentence into the tokens, remove empty tokens
     tokens = [token for token in s.split(" ") if token != ""]
 
-    print("tokens: " + str(tokens))
+    # print("tokens: " + str(tokens))
 
     return tokens
 
@@ -167,7 +167,7 @@ wiki_wiki = wikipediaapi.Wikipedia(
 )
 
 p_wiki=wiki_wiki.page("Test 1")
-print(p_wiki.text)
+# print(p_wiki.text)
 
 wiki_html=wikipediaapi.Wikipedia(
         language='en',
@@ -176,8 +176,8 @@ wiki_html=wikipediaapi.Wikipedia(
 
 def wiki_Search(questionPhraseTokens, queryPhraseTokens, answerTypes, answerPattern):
 
-    questionPhrase = ""
-    queryPhrase = ""
+    questionPhrase = " "
+    queryPhrase = " "
     # questionPhrase = "George Washington"
     # questionPhraseTokens = word_tokenize(questionPhrase)
     # queryPhrase = "born"
@@ -221,21 +221,21 @@ def wiki_Search(questionPhraseTokens, queryPhraseTokens, answerTypes, answerPatt
     # answerPattern = ["CD", "JJ", "NNS"]
     #
 
-    print("questionPhraseTokens " + str(questionPhraseTokens))
+    # print("questionPhraseTokens " + str(questionPhraseTokens))
 
-    questionPhrase = string.join(questionPhraseTokens)
+    questionPhrase = " ".join(questionPhraseTokens)
 
-    queryPhrase = string.join(queryPhraseTokens)
+    queryPhrase = " ".join(queryPhraseTokens)
 
 
-    print("Asking about " + questionPhrase + " " + queryPhrase)
-    print("subject tokens: ")
-    print(questionPhraseTokens)
-    print("question tokens: ")
-    print(queryPhraseTokens)
+    # print("Asking about " + questionPhrase + " " + queryPhrase)
+    # print("subject tokens: ")
+    # print(questionPhraseTokens)
+    # print("question tokens: ")
+    # print(queryPhraseTokens)
 
     p_html=wiki_html.page(questionPhrase)
-    print(p_html.text)
+    # print(p_html.text)
 
     #print("Categories")
     #print_categories(p_html)
@@ -313,7 +313,7 @@ def wiki_Search(questionPhraseTokens, queryPhraseTokens, answerTypes, answerPatt
 
         # look the right type of answers
         for posTaggedWord, pos in posTaggedWords:
-            if pos in answerTypes:
+            if answerTypes != None and pos in answerTypes:
                 interestLevel += 1
                 break # to stop further matching on same answerType
 
@@ -331,16 +331,16 @@ def wiki_Search(questionPhraseTokens, queryPhraseTokens, answerTypes, answerPatt
 
         # if sentence is interesting
         if interestLevel > 1:
-            print("interesting sentence at level " + str(interestLevel))
-            print(currentSentence)
-            print(posTaggedWords)
+            # print("interesting sentence at level " + str(interestLevel))
+            # print(currentSentence)
+            # print(posTaggedWords)
             interestingSentences[currentSentence] = [interestLevel, posTaggedWords]
-            print("----")
+            # print("----")
 
         sentenceIndex += 1
 
 
-    print("interesting sentences")
+    # print("interesting sentences")
     highestInterestLevel = 0
     mostInterestingSentence = None
     mostInterestingTaggedWords = None
@@ -357,10 +357,13 @@ def wiki_Search(questionPhraseTokens, queryPhraseTokens, answerTypes, answerPatt
 
     if mostInterestingSentence == None:
         print("I am not sure, please ask in a different way")
-    else:
+    # else:
+    #     print(mostInterestingSentence)
+        # print("interest level: " + str(highestInterestLevel))
+        # print(mostInterestingTaggedWords)
+
+    if answerTypes == None or answerPattern == None:
         print(mostInterestingSentence)
-        print("interest level: " + str(highestInterestLevel))
-        print(mostInterestingTaggedWords)
 
     answerNoQuestionPhraseWords = [word for word in mostInterestingTaggedWords if not word[0] in questionPhraseTokens]
     answerPhraseWords = [word for word in answerNoQuestionPhraseWords if not stemmer.stem(word[0]) in queryPhraseTokens]
@@ -368,10 +371,10 @@ def wiki_Search(questionPhraseTokens, queryPhraseTokens, answerTypes, answerPatt
     answerTokens = []
 
     for answerCandidate in answerPhraseWords:
-        if answerCandidate[1] in answerTypes:
+        if answerTypes != None and answerCandidate[1] in answerTypes:
             answerTokens.append(answerCandidate)
-    print( "answer tokens: ")
-    print( answerTokens)
+    # print( "answer tokens: ")
+    # print( answerTokens)
 
 
     # answer pattern match
